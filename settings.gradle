@@ -11,4 +11,6 @@ rootProject.name = 'sample-grpc-service'
 
 include 'sample-grpc-client'
 include 'sample-grpc-idl'
+include 'sample-grpc-idl:auth-module'
+include 'sample-grpc-idl:user-module'
 include 'sample-grpc-server'

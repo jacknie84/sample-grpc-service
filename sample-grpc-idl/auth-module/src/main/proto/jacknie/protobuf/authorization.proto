@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package jacknie.protobuf.auth;
+
+option java_package = "com.jacknie.sample.auth";
+option java_multiple_files = true;
+
+import "jacknie/protobuf/chunk.proto";
+import "google/protobuf/timestamp.proto";
+import "jacknie/protobuf/client.proto";
+
+service AuthorizationService {
+  rpc GetAuthorizationsPage (AuthorizationsPageRequest) returns (AuthorizationsPageResponse);
+  rpc GetAuthorizations (AuthorizationsRequest) returns (stream AuthorizationsResponse);
+  rpc GetAuthorization (AuthorizationRequest) returns (AuthorizationResponse);
+  rpc CreateAuthorization (SaveAuthorizationRequest) returns (AuthorizationResponse);
+  rpc UpdateAuthorization (SaveAuthorizationRequest) returns (AuthorizationResponse);
+  rpc PatchAuthorization (SaveAuthorizationRequest) returns (AuthorizationResponse);
+  rpc DeleteAuthorization (AuthorizationRequest) returns (AuthorizationResponse);
+}
+
+message AuthorizationsPageRequest {
+  Pagination pagination = 1;
+  Authorization.Filter filter = 2;
+}
+message AuthorizationsPageResponse {
+  PageMeta pageMeta = 1;
+  repeated Authorization authorizations = 2;
+}
+message AuthorizationsRequest {
+  Boundary boundary = 1;
+  Authorization.Filter filter = 2;
+}
+message AuthorizationsResponse {
+  repeated Authorization authorizations = 1;
+}
+message SaveAuthorizationRequest {
+  Authorization authorization = 1;
+}
+message AuthorizationRequest {
+  int64 authorizationId = 1;
+}
+message AuthorizationResponse {
+  Authorization authorization = 1;
+}
+message Authorization {
+  int64 id = 1;
+  string clientGuid = 2;
+  google.protobuf.Timestamp authTime = 4;
+  google.protobuf.Timestamp createdDate = 5;
+  google.protobuf.Timestamp lastModifiedDate = 6;
+
+  message Filter {
+    repeated int64 ids = 1;
+    repeated string clientGuids = 2;
+    google.protobuf.Timestamp lessThanAuthTime = 4;
+    google.protobuf.Timestamp greaterThanAuthTime = 5;
+    google.protobuf.Timestamp lessThanLastModifiedDate = 6;
+    google.protobuf.Timestamp greaterThanLastModifiedDate = 7;
+  }
+}

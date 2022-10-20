@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package jacknie.protobuf.user;
+
+option java_package = "com.jacknie.sample.user";
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "jacknie/protobuf/chunk.proto";
+
+service UserService {
+  rpc GetUsersPage (UsersPageRequest) returns (UsersPageResponse);
+  rpc GetUsers (UsersRequest) returns (stream UsersResponse);
+  rpc GetUser (UserRequest) returns (UserResponse);
+  rpc CreateUser (SaveUserRequest) returns (UserResponse);
+  rpc UpdateUser (SaveUserRequest) returns (UserResponse);
+  rpc PatchUser (SaveUserRequest) returns (UserResponse);
+  rpc DeleteUser (UserRequest) returns (UserResponse);
+}
+
+message UsersPageRequest {
+  Pagination pagination = 1;
+  User.Filter filter = 2;
+}
+message UsersPageResponse {
+  PageMeta pageMeta = 1;
+  repeated User users = 2;
+}
+message UsersRequest {
+  Boundary boundary = 1;
+  User.Filter filter = 2;
+}
+message UsersResponse {
+  repeated User users = 1;
+}
+message SaveUserRequest {
+  User user = 1;
+}
+message UserRequest {
+  int64 userId = 1;
+}
+message UserResponse {
+  User user = 1;
+}
+message User {
+  int64 id = 1;
+  google.protobuf.StringValue name = 2;
+  google.protobuf.StringValue email = 3;
+  Credential credential = 4;
+  google.protobuf.Timestamp createdDate = 5;
+  google.protobuf.Timestamp lastModifiedDate = 6;
+
+  message Credential {
+    map<string, string> properties = 1;
+    google.protobuf.Timestamp expiresAt = 2;
+  }
+  message Filter {
+    repeated int64 ids = 1;
+    repeated string names = 2;
+    repeated string containsNames = 3;
+    repeated string emails = 4;
+    repeated string containsEmails = 5;
+    google.protobuf.Timestamp lessThanCredentialExpiresAt = 6;
+    google.protobuf.Timestamp greaterThanCredentialExpiresAt = 7;
+    google.protobuf.Timestamp lessThanLastModifiedDate = 8;
+    google.protobuf.Timestamp greaterThanLastModifiedDate = 9;
+  }
+}

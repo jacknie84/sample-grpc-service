@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package jacknie.protobuf;
+
+option java_package = "com.jacknie.sample.shared";
+option java_multiple_files = true;
+
+message Boundary {
+  int64 offset = 1;
+  int64 limit = 2;
+}
+
+message Pagination {
+  int32 page = 1;
+  int32 size = 2;
+  Sort sort = 3;
+
+  message Sort {
+    repeated Order orders = 1;
+
+    enum Direction {
+      ASC = 0;
+      DESC = 1;
+    }
+    enum NullHandling {
+      NATIVE = 0;
+      NULLS_FIRST = 1;
+      NULLS_LAST = 2;
+    }
+    message Order {
+      string property = 1;
+      Direction direction = 2;
+      bool ignoreCase = 3;
+      NullHandling nullHandling = 4;
+    }
+  }
+}
+
+message PageMeta {
+  Pagination pagination = 1;
+  int32 totalPages = 2;
+  int64 totalElements = 3;
+}

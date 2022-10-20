@@ -1,0 +1,30 @@
+plugins {
+  id 'com.google.protobuf' version '0.9.1'
+}
+
+subprojects {
+  apply plugin: 'com.google.protobuf'
+
+  dependencies {
+    protobuf files("${project.parent.projectDir}/shared-proto")
+
+    implementation "io.grpc:grpc-protobuf:$grpcVersion"
+    implementation "io.grpc:grpc-stub:$grpcVersion"
+  }
+
+  protobuf {
+    protoc {
+      artifact = "com.google.protobuf:protoc:$protocVersion"
+    }
+    plugins {
+      grpc {
+        artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+      }
+    }
+    generateProtoTasks {
+      all()*.plugins {
+        grpc {}
+      }
+    }
+  }
+}

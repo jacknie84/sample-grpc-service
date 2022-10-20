@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package jacknie.protobuf.auth;
+
+option java_package = "com.jacknie.sample.auth";
+option java_multiple_files = true;
+
+import "jacknie/protobuf/chunk.proto";
+import "google/protobuf/timestamp.proto";
+
+service ClientService {
+  rpc GetClientsPage (ClientsPageRequest) returns (ClientsPageResponse);
+  rpc GetClients (ClientsRequest) returns (stream ClientsResponse);
+  rpc GetClient (ClientRequest) returns (ClientResponse);
+  rpc CreateClient (SaveClientRequest) returns (ClientResponse);
+  rpc UpdateClient (SaveClientRequest) returns (ClientResponse);
+  rpc PatchClient (SaveClientRequest) returns (ClientResponse);
+  rpc PatchClientSettings (SaveClientSettingsRequest) returns (ClientResponse);
+  rpc DeleteClient (ClientRequest) returns (ClientResponse);
+}
+
+message ClientsPageRequest {
+  Pagination pagination = 1;
+  Client.Filter filter = 2;
+}
+message ClientsPageResponse {
+  PageMeta pageMeta = 1;
+  repeated Client clients = 2;
+}
+message ClientsRequest {
+  Boundary boundary = 1;
+  Client.Filter filter = 2;
+}
+message ClientsResponse {
+  repeated Client clients = 1;
+}
+message SaveClientRequest {
+  Client client = 1;
+}
+message SaveClientSettingsRequest {
+  int64 clientId = 1;
+  Client.Settings settings = 2;
+}
+message ClientRequest {
+  int64 clientId = 1;
+}
+message ClientResponse {
+  Client client = 1;
+}
+message Client {
+  int64 id = 1;
+  string name = 2;
+  Credential credential = 3;
+  Settings settings = 4;
+  google.protobuf.Timestamp createdDate = 5;
+  google.protobuf.Timestamp lastModifiedDate = 6;
+  string guid = 7;
+
+  message Credential {
+    map<string, string> properties = 1;
+    google.protobuf.Timestamp expiresAt = 2;
+  }
+  message Settings {
+    // TODO
+  }
+  message Filter {
+    repeated int64 ids = 1;
+    repeated string names = 2;
+    repeated string containsNames = 3;
+    google.protobuf.Timestamp lessThanCredentialExpiresAt = 4;
+    google.protobuf.Timestamp greaterThanCredentialExpiresAt = 5;
+    google.protobuf.Timestamp lessThanLastModifiedDate = 6;
+    google.protobuf.Timestamp greaterThanLastModifiedDate = 7;
+    repeated string guids = 8;
+  }
+}
