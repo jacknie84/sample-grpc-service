@@ -1,0 +1,15 @@
+plugins {
+  id 'org.springframework.boot' version "$springBootVersion"
+  id 'io.spring.dependency-management' version "$springDepsVersion"
+}
+
+dependencies {
+  annotationProcessor 'org.projectlombok:lombok'
+
+  compileOnly 'org.projectlombok:lombok'
+
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation "net.devh:grpc-client-spring-boot-starter:${grpcSpringBootVersion}"
+  implementation "com.google.protobuf:protobuf-java-util:${protocVersion}"
+  implementation project(':sample-grpc-idl:echo-module')
+}

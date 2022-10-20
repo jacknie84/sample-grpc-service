@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package jacknie.protobuf.echo;
+
+option java_package = "com.jacknie.sample.echo";
+option java_multiple_files = true;
+
+service EchoService {
+  rpc send(EchoRequest) returns (EchoResponse);
+}
+
+message EchoRequest {
+  string message = 1;
+}
+message EchoResponse {
+  string message = 2;
+}
