@@ -10,6 +10,7 @@ dependencies {
 
   developmentOnly 'com.h2database:h2'
 
+  implementation "org.springframework.boot:spring-boot-starter-validation";
   implementation "net.devh:grpc-server-spring-boot-starter:$grpcSpringBootVersion"
   implementation "com.google.protobuf:protobuf-java-util:$protocVersion"
   implementation project(':sample-grpc-idl:echo-module')

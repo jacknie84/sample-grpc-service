@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package jacknie.protobuf;
+
+option java_package = "com.jacknie.sample.shared";
+option java_multiple_files = true;
+
+import "google/protobuf/struct.proto";
+
+message Errors {
+  string message = 1;
+  string exception = 2;
+  string stackTrace = 3;
+  repeated Error details = 4;
+
+  message Error {
+    string code = 1;
+    string message = 2;
+    google.protobuf.Struct attributes = 3;
+  }
+}

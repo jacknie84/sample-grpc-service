@@ -2,7 +2,9 @@ package com.jacknie.sample.config.grpc;
 
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
+import com.jacknie.sample.shared.Errors;
 import io.grpc.*;
+import io.grpc.protobuf.ProtoUtils;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +70,19 @@ public class GrpcLoggingInterceptor implements ServerInterceptor {
         log.info("response: {}", printer.print(response));
       }
       super.sendMessage(message);
+    }
+
+    @SneakyThrows
+    @Override
+    public void close(Status status, Metadata trailers) {
+      if (!status.isOk()) {
+        Metadata.Key<Errors> key = ProtoUtils.keyForProto(Errors.getDefaultInstance());
+        Errors errors = trailers.get(key);
+        if (errors != null) {
+          log.info("error: {}", printer.print(errors));
+        }
+      }
+      super.close(status, trailers);
     }
   }
 }
