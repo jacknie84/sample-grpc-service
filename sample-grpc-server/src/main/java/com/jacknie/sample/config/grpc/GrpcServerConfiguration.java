@@ -9,6 +9,8 @@ public class GrpcServerConfiguration implements GrpcServerConfigurer {
 
   @Override
   public void accept(ServerBuilder<?> serverBuilder) {
-    // do nothing...
+    GrpcLoggingInterceptor loggingInterceptor = new GrpcLoggingInterceptor();
+    loggingInterceptor.setLoggingLevel(GrpcLoggingInterceptor.LoggingLevel.DETAIL);
+    serverBuilder.intercept(loggingInterceptor);
   }
 }
